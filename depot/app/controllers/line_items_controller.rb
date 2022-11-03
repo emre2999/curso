@@ -4,8 +4,6 @@ class LineItemsController < ApplicationController
   before_action :set_cart, only: [:create]
   before_action :set_line_item, only: %i[ show edit update destroy ]
 
-
-
   # GET /line_items or /line_items.json
   def index
     @line_items = LineItem.all
@@ -31,7 +29,8 @@ class LineItemsController < ApplicationController
 
     respond_to do |format|
       if @line_item.save
-        format.html { redirect_to @line_item.cart, notice: "Line item was successfully created." }
+        format.html { redirect_to store_index_url }
+        format.js { @current_item = @line_item }
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -71,6 +70,6 @@ class LineItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def line_item_params
-      params.require(:line_item).permit(:product_id, :cart_id)
+      params.require(:line_item).permit(:product_id)
     end
 end
